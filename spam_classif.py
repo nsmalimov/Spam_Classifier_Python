@@ -91,7 +91,7 @@ def classif(vect_tr, vect_mn):
       long_mass = sorted(long_mass, key=itemgetter(0))
       vsp_mass = []
       k = 0
-      while k < 5:
+      while k < 3:
         vsp_mass.append(long_mass[k][1])
         k = k + 1
       k = 0
