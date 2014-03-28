@@ -49,10 +49,10 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
                 vect_tr[n][m] = tokens.count(povt_mass[m])
                 m = m + 1
           m = 0          
-          vect_tr[n][50] = (len(tokens)) / len(nltk.word_tokenize(data_tr[n]['body'])) 
+          vect_tr[n][50] = len(nltk.word_tokenize(data_tr[n]['body'])) / 52
           for i in tokens:
-              if re.search("Re", i) == True:
-                 vect_tr[n][51] = 50 
+              if re.search("Re", i) != None:
+                 vect_tr[n][51] = 3 
           n = n + 1  
     n = 0 
     m = 0
@@ -65,10 +65,10 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
                 vect_mn[n][m] = tokens.count(povt_mass[m])
                 m = m + 1
           m = 0              
-          vect_mn[n][50] = (len(tokens)) / len(nltk.word_tokenize(data_mn[n]['body']))  
+          vect_mn[n][50] = len(nltk.word_tokenize(data_mn[n]['body'])) / 52
           for i in tokens:
-              if re.search("Re", i) == True:
-                 vect_mn[n][51] = 50 
+              if re.search("Re", i) != None:
+                 vect_mn[n][51] = 3 
           n = n + 1  
     return vect_tr, vect_mn 
 
