@@ -41,7 +41,9 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
     vect_tr = []
     vect_mn = []
     while n < len(data_tr):
-          vect_tr.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, data_tr[n]['is_spam']])
+          a = [0 for i in xrange(50)]
+          a.append(data_tr[n]['is_spam'])
+          vect_tr.append(a)
           tokens = nltk.word_tokenize(data_tr[n]['subject'])         
           while m < len(povt_mass):
                 vect_tr[n][m] = tokens.count(povt_mass[m])
@@ -51,7 +53,9 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
     n = 0 
     m = 0
     while n < len(data_mn):
-          vect_mn.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, way_mn[n]])
+          a = [0 for i in xrange(50)]
+          a.append(way_mn[n])
+          vect_mn.append(a)
           tokens = nltk.word_tokenize(data_mn[n]['subject']) 
           while m < len(povt_mass):
                 vect_mn[n][m] = tokens.count(povt_mass[m])
