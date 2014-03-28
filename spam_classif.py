@@ -49,10 +49,8 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
                 vect_tr[n][m] = tokens.count(povt_mass[m])
                 m = m + 1
           m = 0          
-          vect_tr[n][50] = len(nltk.word_tokenize(data_tr[n]['body'])) / 52
-          for i in tokens:
-              if re.search("Re", i) != None:
-                 vect_tr[n][51] = 3 
+          vect_tr[n][50] =  len(nltk.word_tokenize(data_tr[n]['body'])) / 52
+          vect_tr[n][51] = len(tokens) / 52
           n = n + 1  
     n = 0 
     m = 0
@@ -65,10 +63,9 @@ def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
                 vect_mn[n][m] = tokens.count(povt_mass[m])
                 m = m + 1
           m = 0              
-          vect_mn[n][50] = len(nltk.word_tokenize(data_mn[n]['body'])) / 52
-          for i in tokens:
-              if re.search("Re", i) != None:
-                 vect_mn[n][51] = 3 
+          vect_mn[n][50] = len(nltk.word_tokenize(data_mn[n]['body'])) / 52 
+          print vect_mn[n][50]
+          vect_mn[n][51] = len(tokens) / 52 
           n = n + 1  
     return vect_tr, vect_mn 
 
@@ -80,7 +77,7 @@ def classif(vect_tr, vect_mn):
     sum = 0
     long_mass = []
     while n < len(vect_mn):
-      #print n
+      print n
       while m < len(vect_tr):
         while c != 52:
           koaf = ((vect_tr[m][c]-vect_mn[n][c])**2)
@@ -94,7 +91,7 @@ def classif(vect_tr, vect_mn):
       long_mass = sorted(long_mass, key=itemgetter(0))
       vsp_mass = []
       k = 0
-      while k < 3:
+      while k < 5:
         vsp_mass.append(long_mass[k][1])
         k = k + 1
       k = 0
