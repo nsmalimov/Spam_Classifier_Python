@@ -4,6 +4,7 @@ import os
 import re
 import nltk
 import numpy as np
+from operator import itemgetter
  
 def read_tr(dir):
     data1 = []
@@ -23,32 +24,39 @@ def read_mn(dir):
             way_mn.append(file)
     return data2, way_mn
     
-data_tr = read_tr('directtory_train')
-data_mn, way_mn = read_mn('directory_test')
+data_tr = read_tr('/home/partizan/classif2/spam_data/train')
+data_mn, way_mn = read_mn('/home/partizan/classif2/spam_data/test')
 
+def read_povt():
+    f = open("words.txt", "r")
+    text = nltk.word_tokenize(f.read())
+    povt_mass = []
+    for i in text:
+        povt_mass.append(i)
+    return povt_mass
 
-def train(data_tr, way_tr, data_mn, way_mn):
+def train(data_tr, way_tr, data_mn, way_mn, povt_mass):
     n = 0
+    m = 0
     vect_tr = []
     vect_mn = []
     while n < len(data_tr):
-          vect_tr.append([50, 50, data_tr[n]['is_spam']])
-          tokens = nltk.word_tokenize(data_tr[n]['subject']) 
-          for i in tokens:
-              if re.search('spam',i) or re.search('SPAM',i):
-                 vect_tr[n][0] = vect_tr[n][0] +120
-              if re.search('Re', i):
-                 vect_tr[n][1] = vect_tr[n][1] -20
+          vect_tr.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, data_tr[n]['is_spam']])
+          tokens = nltk.word_tokenize(data_tr[n]['subject'])         
+          while m < len(povt_mass):
+                vect_tr[n][m] = tokens.count(povt_mass[m])
+                m = m + 1
+          m = 0                
           n = n + 1  
-    n = 0
+    n = 0 
+    m = 0
     while n < len(data_mn):
-          vect_mn.append([50, 50, way_mn[n]])
+          vect_mn.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, way_mn[n]])
           tokens = nltk.word_tokenize(data_mn[n]['subject']) 
-          for i in tokens:
-              if re.search('spam',i) or re.search('SPAM',i):
-                 vect_mn[n][0] = vect_mn[n][0] +120
-              if re.search('Re', i):
-                 vect_mn[n][1] = vect_mn[n][0] -20               
+          while m < len(povt_mass):
+                vect_mn[n][m] = tokens.count(povt_mass[m])
+                m = m + 1
+          m = 0              
           n = n + 1  
     return vect_tr, vect_mn 
 
@@ -56,29 +64,45 @@ def classif(vect_tr, vect_mn):
     f = open('test.txt','w')
     n = 0
     m = 0
-    num_mass = []
-    num = 0
-    sorted(vect_tr)
-    while (n < len(data_mn)):
-          koaf = 0
-          iter = np.sqrt((vect_tr[m][0] - vect_mn[n][0])**2 + (vect_tr[m][0] - vect_mn[n][0])**2)
-          while (m < len(data_tr)):
-                iter = np.sqrt((vect_tr[m][0] - vect_mn[n][0])**2 + (vect_tr[m][1] - vect_mn[n][1])**2)
-                if iter > koaf:
-                   koaf = iter
-                   num = m
-                m = m + 1
-          num_mass.append([way_mn[n], vect_tr[num][2]])
-          f.write(u'%s\t%s\n' % (way_mn[n], vect_tr[num][2]))
-          num_mass = []
-          m = 0
-          n = n + 1
+    c = 0
+    sum = 0
+    long_mass = []
+    while n < len(vect_mn):
+      while m < len(vect_tr):
+        while c != 50:
+          koaf = ((vect_tr[m][c]-vect_mn[n][c])**2)
+          sum = koaf + sum
+          c = c + 1
+        sqr = np.sqrt(sum)
+        c = 0
+        long_mass.append([sqr, vect_tr[m][50]])
+        #
+        sum = 0
+        koaf = 0
+        m = m + 1
+      print n
+      long_mass = sorted(long_mass, key=itemgetter(0))
+      vsp_mass = []
+      d = 0
+      while d < 20:
+        vsp_mass.append(long_mass[d][1])
+        d = d + 1
+      d = 0
+      if vsp_mass.count(False) >= vsp_mass.count(True):
+        f.write(u'%s\t%s\n' % (way_mn[n], False))
+      else:
+        f.write(u'%s\t%s\n' % (way_mn[n], True))
+      vsp_mass = []
+      long_mass = []
+      sum = 0
+      n = n + 1
+      m = 0
+    
     f.close()
 
-data_tr, way_tr = read_tr('directory_train')
-data_mn, way_mn = read_mn('directory_test')
+data_tr, way_tr = read_tr('/home/partizan/classif2/spam_data/train')
+data_mn, way_mn = read_mn('/home/partizan/classif2/spam_data/test')
 
-vect_tr, vect_mn = train(data_tr, way_tr, data_mn, way_mn)
+vect_tr, vect_mn = train(data_tr, way_tr, data_mn, way_mn, read_povt())
 classif(vect_tr, vect_mn)
-
 
