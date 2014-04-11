@@ -24,8 +24,8 @@ def read_mn(dir):
             way_mn.append(file)
     return data2, way_mn
     
-data_tr = read_tr('/home/partizan/classif2/spam_data/train')
-data_mn, way_mn = read_mn('/home/partizan/classif2/spam_data/test')
+data_tr = read_tr('spam_data/train')
+data_mn, way_mn = read_mn('spam_data/test')
 
 def read_povt():
     f = open("words.txt", "r")
@@ -105,8 +105,8 @@ def classif(vect_tr, vect_mn):
       m = 0  
     f.close()
 
-data_tr, way_tr = read_tr('/home/partizan/classif2/spam_data/train')
-data_mn, way_mn = read_mn('/home/partizan/classif2/spam_data/test')
+data_tr, way_tr = read_tr('spam_data/train')
+data_mn, way_mn = read_mn('spam_data/test')
 
 vect_tr, vect_mn = train(data_tr, way_tr, data_mn, way_mn, read_povt())
 classif(vect_tr, vect_mn)
