@@ -13,7 +13,7 @@ def read_tr(dir):
             data1.append(json.load(f))          
     return data1
     
-data_tr = read_tr('/home/partizan/classif2/spam_data/train')
+data_tr = read_tr('spam_data/train')
 
 def fnd_repeat(data_tr):
     n = 0
